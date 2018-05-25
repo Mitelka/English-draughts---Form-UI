@@ -1,2 +1,2 @@
 # English-draughts-Form-UI
-A simple English draughts game with Windoes Form
+A simple English draughts game with Windows  Form
