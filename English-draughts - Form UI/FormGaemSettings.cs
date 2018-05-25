@@ -8,17 +8,17 @@ namespace Ex04.Damka.FormUI
 {
     public class FormGaemSettings : Form
     {       
-        private TextBox m_PlayerOneNameText = new TextBox();
-        private TextBox m_PlayerTwoNameText = new TextBox();
-        private Label m_BoarsSize = new Label();
-        private Label m_PlayerOneLabel = new Label();
-        private Label m_PlayerTwoLabel = new Label();
-        private Label m_PlayersLabel = new Label();
-        private CheckBox m_PlayerTwoCheckBox = new CheckBox();
-        private Button m_Done = new Button();
-        private RadioButton m_6X6Size = new RadioButton();
-        private RadioButton m_8X8Size = new RadioButton();
-        private RadioButton m_10X10Size = new RadioButton();
+        private readonly TextBox m_PlayerOneNameText = new TextBox();
+        private readonly TextBox m_PlayerTwoNameText = new TextBox();
+        private readonly Label m_BoarsSize = new Label();
+        private readonly Label m_PlayerOneLabel = new Label();
+        private readonly Label m_PlayerTwoLabel = new Label();
+        private readonly Label m_PlayersLabel = new Label();
+        private readonly CheckBox m_PlayerTwoCheckBox = new CheckBox();
+        private readonly Button m_Done = new Button();
+        private readonly RadioButton m_6X6Size = new RadioButton();
+        private readonly RadioButton m_8X8Size = new RadioButton();
+        private readonly RadioButton m_10X10Size = new RadioButton();
 
         public FormGaemSettings()
         {
@@ -67,8 +67,19 @@ namespace Ex04.Damka.FormUI
 
             Controls.AddRange(new Control[] { m_PlayersLabel, m_PlayerTwoNameText, m_PlayerOneNameText, m_BoarsSize, m_PlayerOneLabel, m_PlayerTwoLabel, m_Done, m_6X6Size, m_8X8Size, m_10X10Size, m_PlayerTwoCheckBox });
 
-            // this.m_ButtonCancel.Click += new EventHandler(m_ButtonCancel_Click);
-            // this.m_ButtonOK.Click += new EventHandler(m_ButtonOK_Click);
+            m_PlayerTwoCheckBox.Click += new EventHandler(cheackBoxbutton_Click);
+        }
+
+        private void cheackBoxbutton_Click(object sender, EventArgs e)
+        {
+            if (m_PlayerTwoCheckBox.Checked)
+            {
+                m_PlayerTwoNameText.Enabled = true;
+            }
+            else
+            {
+                m_PlayerTwoNameText.Enabled = false;
+            }
         }
     }
 }
