@@ -19,6 +19,7 @@ namespace Ex04.Damka.FormUI
         private readonly RadioButton m_6X6Size = new RadioButton();
         private readonly RadioButton m_8X8Size = new RadioButton();
         private readonly RadioButton m_10X10Size = new RadioButton();
+        private bool isSecondPlayerComputer = true;
 
         public FormGaemSettings()
         {
@@ -93,6 +94,24 @@ namespace Ex04.Damka.FormUI
             }
             else
             {
+                if (m_6X6Size.Checked)
+                {
+                    BoardSize = 6;
+                }
+                else if (m_8X8Size.Checked)
+                {
+                    BoardSize = 8;
+                }
+                else
+                {
+                    BoardSize = 10;
+                }
+
+                if (m_PlayerTwoCheckBox.Checked)
+                {
+                    isSecondPlayerComputer = false;
+                }
+
                 Close();
                 createFormBoard();
             }
@@ -122,9 +141,11 @@ namespace Ex04.Damka.FormUI
             set { m_PlayerTwoNameText.Text = value; }
         }
 
+        public byte BoardSize { get; set; }
+
         private void createFormBoard()
         {           
-            FormDamkaBoard newFormBoard = new FormDamkaBoard();
+            FormDamkaBoard newFormBoard = new FormDamkaBoard(PlayerOneName, PlayerTwoName, isSecondPlayerComputer, BoardSize);
             newFormBoard.ShowDialog();
         }
     }

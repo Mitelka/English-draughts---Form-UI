@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ex04.Damka.Logic
 { 
-    internal class GameLogic
+    public class GameLogic
     {
         private Player[] m_Players;
         private byte m_BoardSize;
@@ -20,11 +20,11 @@ namespace Ex04.Damka.Logic
             InitializeTokens();
         }
 
-        internal Board GameBoard { get => m_GameBoard; set => m_GameBoard = value; }
+        public Board GameBoard { get => m_GameBoard; set => m_GameBoard = value; }
 
         public eGameResult GameResult { get => m_GameResult; }
 
-        private void initializeBoard()
+        public void initializeBoard()
         {
             m_GameBoard = new Board(m_BoardSize);
         }

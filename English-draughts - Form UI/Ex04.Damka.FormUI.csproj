@@ -58,6 +58,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormDamkaBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormGaemSettings.cs">
       <SubType>Form</SubType>
     </Compile>

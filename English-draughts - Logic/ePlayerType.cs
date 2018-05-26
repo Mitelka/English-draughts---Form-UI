@@ -1,6 +1,6 @@
 ﻿namespace Ex04.Damka.Logic
 {
-    internal enum ePlayerType
+    public enum ePlayerType
     {
         Human = 1,
         Computer = 2

@@ -2,7 +2,7 @@
 
 namespace Ex04.Damka.Logic
 {
-    internal class Player
+    public class Player
     {
         private ePlayerType m_PlayerType;
         private eSign m_Sign;
