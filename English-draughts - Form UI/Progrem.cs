@@ -6,7 +6,7 @@
         {
             FormGaemSettings formUiDamka = new FormGaemSettings();
 
-            formUiDamka.ShowDialog();
+            formUiDamka.ShowDialog();           
         }
     }
 }

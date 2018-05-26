@@ -56,6 +56,7 @@ namespace Ex04.Damka.FormUI
             m_PlayerTwoLabel.Location = new Point(25, 170);
             m_PlayerTwoNameText.Location = new Point(180, 170);
             m_PlayerTwoNameText.Enabled = false;
+            m_PlayerTwoNameText.Text = "[Computer]";
 
             m_PlayersLabel.Text = "Players:";
             m_PlayersLabel.Location = new Point(10, 75);          
@@ -68,6 +69,33 @@ namespace Ex04.Damka.FormUI
             Controls.AddRange(new Control[] { m_PlayersLabel, m_PlayerTwoNameText, m_PlayerOneNameText, m_BoarsSize, m_PlayerOneLabel, m_PlayerTwoLabel, m_Done, m_6X6Size, m_8X8Size, m_10X10Size, m_PlayerTwoCheckBox });
 
             m_PlayerTwoCheckBox.Click += new EventHandler(cheackBoxbutton_Click);
+            m_Done.Click += new EventHandler(Done_Click);
+        }
+
+        private void Done_Click(object sender, EventArgs e)
+        {
+            if (!m_6X6Size.Checked && !m_8X8Size.Checked && !m_10X10Size.Checked)
+            {
+                const string message = "You must Choose Board Size!";
+                MessageBox.Show(message);
+            }
+
+            if (string.IsNullOrEmpty(m_PlayerOneNameText.Text))
+            {
+                const string message = "Player 1 Name can't be empty";
+                MessageBox.Show(message);
+            }
+
+            if (m_PlayerTwoCheckBox.Checked && string.IsNullOrEmpty(m_PlayerTwoNameText.Text))
+            {
+                const string message = "Player 2 Name can't be empty";
+                MessageBox.Show(message);
+            }
+            else
+            {
+                Close();
+                createFormBoard();
+            }
         }
 
         private void cheackBoxbutton_Click(object sender, EventArgs e)
@@ -80,6 +108,24 @@ namespace Ex04.Damka.FormUI
             {
                 m_PlayerTwoNameText.Enabled = false;
             }
+        }
+
+        public string PlayerOneName
+        {
+            get { return m_PlayerOneNameText.Text; }
+            set { m_PlayerOneNameText.Text = value; }
+        }
+
+        public string PlayerTwoName
+        {
+            get { return m_PlayerTwoNameText.Text; }
+            set { m_PlayerTwoNameText.Text = value; }
+        }
+
+        private void createFormBoard()
+        {           
+            FormDamkaBoard newFormBoard = new FormDamkaBoard();
+            newFormBoard.ShowDialog();
         }
     }
 }
