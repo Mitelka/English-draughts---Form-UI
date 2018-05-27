@@ -6,15 +6,15 @@
         private readonly byte m_NumOfCols;
         private Cell[,] m_PlayBoard;
 
-        public Board(byte i_boardSize)
+        public Board(byte i_BoardSize)
         {
-            m_NumOfRows = m_NumOfCols = i_boardSize;
+            m_NumOfRows = m_NumOfCols = i_BoardSize;
             setBoard();
         }
 
         public void ResetBoard()
         {
-            setBoardInitialValues();
+            SetBoardInitialValues();
         }
 
         public byte BoardSize { get => m_NumOfCols; }
@@ -32,10 +32,10 @@
         private void setBoard()
         {
             m_PlayBoard = new Cell[m_NumOfRows, m_NumOfCols];
-            setBoardInitialValues();
+            SetBoardInitialValues();
         }
 
-        public void setBoardInitialValues()
+        public void SetBoardInitialValues()
         {
             int numOfRowsForPlayer = (BoardSize - 2) / 2;
             eSign signToSet;

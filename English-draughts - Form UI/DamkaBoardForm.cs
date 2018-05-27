@@ -4,14 +4,14 @@ using Ex04.Damka.Logic;
 
 namespace Ex04.Damka.FormUI
 {   
-    public class FormDamkaBoard : Form
+    public class DamkaBoardForm : Form
     {
-        private const byte m_width = 40;
-        private const byte m_height = 40;
+        private const byte k_Width = 40;
+        private const byte k_Height = 40;
         private GameLogic m_GameLogic;
         private Button[,] m_DamkaBoard;       
 
-        public FormDamkaBoard(string playerOneName, string playerTwoName, bool isSecondPlayerComputer, byte boardSize)
+        public DamkaBoardForm(string playerOneName, string playerTwoName, bool isSecondPlayerComputer, byte boardSize)
         {
             BackColor = Color.LightGray;
             Size = new Size(boardSize * 50, boardSize * 50);
@@ -22,22 +22,22 @@ namespace Ex04.Damka.FormUI
             createFormBoard(boardSize);
         }
 
-        private void runGameLogic(string i_playerOneName, string i_playerTwoName, bool i_isSecondPlayerComputer, byte i_boardSize)
+        private void runGameLogic(string i_FirstPlayerName, string i_SecPlayerName, bool i_IsPlayerComputer, byte i_BoardSize)
         {
-            Player playerOne = new Player(ePlayerType.Human, eSign.X, i_playerOneName);
-            Player playerTwo = new Player(i_isSecondPlayerComputer ? ePlayerType.Computer : ePlayerType.Human, eSign.O, i_playerTwoName);
+            Player playerOne = new Player(ePlayerType.Human, eSign.X, i_FirstPlayerName);
+            Player playerTwo = new Player(i_IsPlayerComputer ? ePlayerType.Computer : ePlayerType.Human, eSign.O, i_SecPlayerName);
             Player[] Players = new Player[2];
             Players[0] = playerOne;
             Players[1] = playerTwo;
 
-            m_GameLogic = new GameLogic(Players, i_boardSize, i_isSecondPlayerComputer ? eGameType.HumanVsComputer : eGameType.HumanVsHuman);
+            m_GameLogic = new GameLogic(Players, i_BoardSize, i_IsPlayerComputer ? eGameType.HumanVsComputer : eGameType.HumanVsHuman);
         }
 
-        private void createFormBoard(byte boardSize)
+        private void createFormBoard(byte i_BoardSize)
         {
             byte numOfRows;
             byte numOfColum;
-            numOfRows = numOfColum = boardSize;
+            numOfRows = numOfColum = i_BoardSize;
 
             var grayCell = Color.DarkGray;
             var whiteCell = Color.White;
@@ -49,8 +49,8 @@ namespace Ex04.Damka.FormUI
                 {              
                     Button newButton = new Button
                     {
-                        Size = new Size(m_width, m_height),
-                        Location = new Point(m_width * row, m_height * col)                       
+                        Size = new Size(k_Width, k_Height),
+                        Location = new Point(k_Width * row, k_Height * col)                       
                     };
 
                     Controls.Add(newButton);

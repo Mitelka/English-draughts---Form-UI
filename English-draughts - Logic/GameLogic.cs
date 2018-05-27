@@ -5,29 +5,25 @@ namespace Ex04.Damka.Logic
 { 
     public class GameLogic
     {
-        private Player[] m_Players;
+        private readonly Player[] m_Players;
         private byte m_BoardSize;
         private eGameType m_GameType;
         private eGameResult m_GameResult;
-        public static Board m_GameBoard;
+        private readonly Board m_GameBoard;
 
         public GameLogic(Player[] i_players, byte i_boardSize, eGameType i_gameType)
         {
             m_Players = i_players;
             m_BoardSize = i_boardSize;
             m_GameType = i_gameType;
-            initializeBoard();
+            m_GameBoard = new Board(m_BoardSize);
             InitializeTokens();
         }
 
-        public Board GameBoard { get => m_GameBoard; set => m_GameBoard = value; }
+        public Board GameBoard { get => m_GameBoard; }
 
         public eGameResult GameResult { get => m_GameResult; }
 
-        public void initializeBoard()
-        {
-            m_GameBoard = new Board(m_BoardSize);
-        }
 
         public void InitializeTokens()
         {
@@ -58,10 +54,10 @@ namespace Ex04.Damka.Logic
                 }
             }
 
-            updateAllEatingOptionalCellMove(m_Players[i_PlayerIndex].PlayerPotentialMoveslist, i_PlayerIndex);
+            updateAllEatingOptionalCellMove(i_PlayerIndex);
         }
 
-        private void updateAllEatingOptionalCellMove(List<Player.PlayerMovelist> m_PlayerEatingOptionlist, int i_PlayerIndex)
+        private void updateAllEatingOptionalCellMove(int i_PlayerIndex)
         {
             List<Player.PlayerMovelist> playerPotentialEatinglist = new List<Player.PlayerMovelist>();
             foreach (Player.PlayerMovelist optionaEatingMove in m_Players[i_PlayerIndex].PlayerPotentialMoveslist)
@@ -81,7 +77,17 @@ namespace Ex04.Damka.Logic
         public bool AreCellsLegal(Cell i_OriginCell, Cell i_DestCell, eSign i_PlayerSign, ref bool o_DidEatFlag)
         {
             bool moveIsLegal = true;
-            if ((m_GameBoard[i_OriginCell].CellSign != i_PlayerSign && m_GameBoard[i_OriginCell].CellSign != getKingsAlterSign(i_PlayerSign)) || m_GameBoard[i_DestCell].CellSign != eSign.Empty)
+            if (i_OriginCell.CellRow < 0 || i_OriginCell.CellRow > m_BoardSize || i_OriginCell.CellCol < 0 || i_OriginCell.CellCol > m_BoardSize)
+            {
+                moveIsLegal = false;
+                o_DidEatFlag = false;
+            }
+            else if (i_DestCell.CellRow < 0 || i_DestCell.CellRow > m_BoardSize || i_DestCell.CellCol < 0 || i_DestCell.CellCol > m_BoardSize)
+            {
+                moveIsLegal = false;
+                o_DidEatFlag = false;
+            }
+            else if ((m_GameBoard[i_OriginCell].CellSign != i_PlayerSign && m_GameBoard[i_OriginCell].CellSign != getKingsAlterSign(i_PlayerSign)) || m_GameBoard[i_DestCell].CellSign != eSign.Empty)
             {
                 moveIsLegal = false;
                 o_DidEatFlag = false;

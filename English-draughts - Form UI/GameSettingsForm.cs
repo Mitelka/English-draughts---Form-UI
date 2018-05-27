@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace Ex04.Damka.FormUI
 {
-    public class FormGaemSettings : Form
+    public class GameSettingsForm : Form
     {       
         private readonly TextBox m_PlayerOneNameText = new TextBox();
         private readonly TextBox m_PlayerTwoNameText = new TextBox();
@@ -21,7 +21,7 @@ namespace Ex04.Damka.FormUI
         private readonly RadioButton m_10X10Size = new RadioButton();
         private bool isSecondPlayerComputer = true;
 
-        public FormGaemSettings()
+        public GameSettingsForm()
         {
             BackColor = Color.LightBlue;
             Size = new Size(300, 300);
@@ -113,7 +113,7 @@ namespace Ex04.Damka.FormUI
                 }
 
                 Close();
-                createFormBoard();
+                createBoardForm();
             }
         }
 
@@ -143,9 +143,9 @@ namespace Ex04.Damka.FormUI
 
         public byte BoardSize { get; set; }
 
-        private void createFormBoard()
+        private void createBoardForm()
         {           
-            FormDamkaBoard newFormBoard = new FormDamkaBoard(PlayerOneName, PlayerTwoName, isSecondPlayerComputer, BoardSize);
+            DamkaBoardForm newFormBoard = new DamkaBoardForm(PlayerOneName, PlayerTwoName, isSecondPlayerComputer, BoardSize);
             newFormBoard.ShowDialog();
         }
     }

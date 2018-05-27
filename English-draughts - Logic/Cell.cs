@@ -31,15 +31,6 @@ namespace Ex04.Damka.Logic
                 if(char.IsUpper(i_Input[0]) && char.IsLower(i_Input[1]))
                 {
                     o_ParsedCell = new Cell((byte)(i_Input[1] - 'a'), (byte)(i_Input[0] - 'A'), eSign.Empty);
-
-                    if (o_ParsedCell.CellRow < 0 || o_ParsedCell.CellRow > GameLogic.m_GameBoard.BoardSize || o_ParsedCell.CellCol < 0 || o_ParsedCell.CellCol > GameLogic.m_GameBoard.BoardSize)
-                    {
-                        isValidInput = false;
-                    }
-                    else
-                    {
-                        isValidInput = true;
-                    }
                 }
             }
 
