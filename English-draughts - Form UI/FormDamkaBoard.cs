@@ -7,11 +7,6 @@ namespace Ex04.Damka.FormUI
 {   
     public class FormDamkaBoard : Form
     {
-        void NewButton_Click(object sender, System.EventArgs e)
-        {
-        }
-
-
         private const byte k_Width = 40;
         private const byte k_Height = 40;
         private const byte k_BoardLocationX = 40;
