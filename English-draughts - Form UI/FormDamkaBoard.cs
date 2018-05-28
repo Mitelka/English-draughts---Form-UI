@@ -110,6 +110,12 @@ namespace Ex04.Damka.FormUI
                 button.Click -= selectBoardButton_Click;
                 button.Click += new EventHandler(deselectBoardButton_Click);
             }
+            else
+            {
+                //TODO: check if there is a selected cell on the board
+                //if so, check if legal move, if legal move, update the board logic and the back color
+                MessageBox.Show("Invalid step. Please try again.");
+            }
         }
 
         private void deselectBoardButton_Click(object sender, EventArgs e)
