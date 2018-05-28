@@ -1,7 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Ex04.Damka.Logic;
-using System;
 
 namespace Ex04.Damka.FormUI
 {   
@@ -11,14 +12,14 @@ namespace Ex04.Damka.FormUI
         private const byte k_Height = 40;
         private const byte k_BoardLocationX = 40;
         private const byte k_BoardLocationY = 40;
-        private GameLogic m_GameLogic;
-        private Button[,] m_DamkaBoard;
         private readonly Label m_FirstPlayerLabel = new Label();
         private readonly Label m_SecPlayerLabel = new Label();
         private readonly Label m_FirstPlayerScoreLabel = new Label();
         private readonly Label m_SecPlayerScoreLabel = new Label();
+        private GameLogic m_GameLogic;
+        private Button[,] m_DamkaBoard;
         private FormGameSettings m_FormSettings = new FormGameSettings();
-
+        private List<PlayerButtonMovelist> possibleButtons = new List<PlayerButtonMovelist>();
 
         public FormDamkaBoard(string i_FirstPlayerName, string i_SecPlayerName, bool i_IsPlayerComputer, byte i_BoardSize)
         {
@@ -33,8 +34,8 @@ namespace Ex04.Damka.FormUI
 
         private void runGameLogic(string i_FirstPlayerName, string i_SecPlayerName, bool i_IsPlayerComputer, byte i_BoardSize)
         {
-            Player playerOne = new Player(ePlayerType.Human, eSign.X, i_FirstPlayerName);
-            Player playerTwo = new Player(i_IsPlayerComputer ? ePlayerType.Computer : ePlayerType.Human, eSign.O, i_SecPlayerName);
+            Player playerOne = new Player(ePlayerType.Human, eSign.O, i_FirstPlayerName);
+            Player playerTwo = new Player(i_IsPlayerComputer ? ePlayerType.Computer : ePlayerType.Human, eSign.X, i_SecPlayerName);
             Player[] players = new Player[2];
             players[0] = playerOne;
             players[1] = playerTwo;
@@ -61,7 +62,7 @@ namespace Ex04.Damka.FormUI
                         Size = new Size(k_Width, k_Height),
                         Location = new Point(k_BoardLocationX + (k_Width * currCol), k_BoardLocationY + (k_Height * currRow))
                     };
-
+                    
                     newButton.Text = getSignToPrint(m_GameLogic.GameBoard[currRow, currCol].CellSign);
                     if (currRow % 2 == 0)
                     {
@@ -89,16 +90,19 @@ namespace Ex04.Damka.FormUI
                             newButton.Enabled = false;
                         }
                     }
+
                     Controls.Add(newButton);
                     m_DamkaBoard[currRow, currCol] = newButton;
                 }
             }
+
             initControls();
         }
 
         private void selectBoardButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
+            bool isAnotherButtonClicked = false;
             if(button.Text != " ")
             {
                 button.BackColor = Color.LightBlue;
@@ -107,9 +111,21 @@ namespace Ex04.Damka.FormUI
             }
             else
             {
-                //TODO: check if there is a selected cell on the board
-                //if so, check if legal move, if legal move, update the board logic and the back color
-                MessageBox.Show("Invalid step. Please try again.");
+                foreach (Button cheackIfButtonSelect in m_DamkaBoard)
+                {
+                    if (cheackIfButtonSelect.BackColor == Color.LightBlue)
+                    {                       
+                        isAnotherButtonClicked = true;
+                        
+                        // check if legal move(setPossibleSquaresUI?), if legal move, update the board logic and the back color
+                        break;
+                    }                   
+                }
+
+                if (!isAnotherButtonClicked)
+                {
+                    MessageBox.Show("You must select a square to play with");
+                }             
             }
         }
 
@@ -162,6 +178,20 @@ namespace Ex04.Damka.FormUI
 
             return signChar.ToString();
         }
-    }
 
+        private void setPossibleButtonsUI(byte i_playerIndex)
+        {
+            bool o_DidEat = false;
+            m_GameLogic.UpdateAllOptionalCellMove(i_playerIndex, m_GameLogic.Players[i_playerIndex].Sign, ref o_DidEat);
+            List<Player.PlayerMovelist> PlayerMoveList = m_GameLogic.Players[i_playerIndex].PlayerPotentialMoveslist;
+            
+            foreach(Player.PlayerMovelist Movelist in PlayerMoveList)
+            {
+                Button original = m_DamkaBoard[Movelist.originalCell.CellRow, Movelist.originalCell.CellCol];
+                Button desired = m_DamkaBoard[Movelist.desiredCell.CellRow, Movelist.desiredCell.CellCol];
+
+                possibleButtons.Add(new PlayerButtonMovelist() { originalButton = original, desiredButton = desired });
+            }
+        }
+    }
 }

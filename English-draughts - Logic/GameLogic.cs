@@ -5,11 +5,11 @@ namespace Ex04.Damka.Logic
 { 
     public class GameLogic
     {
+        private readonly Board m_GameBoard;
         private readonly Player[] m_Players;
         private byte m_BoardSize;
         private eGameType m_GameType;
-        private eGameResult m_GameResult;
-        private readonly Board m_GameBoard;
+        private eGameResult m_GameResult;      
 
         public GameLogic(Player[] i_Players, byte i_BoardSize, eGameType i_GameType)
         {
@@ -21,6 +21,8 @@ namespace Ex04.Damka.Logic
         }
 
         public Board GameBoard { get => m_GameBoard; }
+
+        public Player[] Players { get => m_Players; }
 
         public eGameResult GameResult { get => m_GameResult; }
 
