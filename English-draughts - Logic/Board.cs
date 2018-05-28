@@ -27,7 +27,7 @@
             set => m_PlayBoard[i_CurrentCell.CellRow, i_CurrentCell.CellCol] = i_CurrentCell;
         }
 
-        internal Cell this[byte i_CurrRow, byte i_CurrCol] => m_PlayBoard[i_CurrRow, i_CurrCol];
+        public Cell this[byte i_CurrRow, byte i_CurrCol] => m_PlayBoard[i_CurrRow, i_CurrCol];
 
         private void setBoard()
         {

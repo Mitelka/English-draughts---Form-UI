@@ -4,7 +4,7 @@
     {
         public static void Main()
         {
-            GameSettingsForm damkaUIForm = new GameSettingsForm();
+            FormGameSettings damkaUIForm = new FormGameSettings();
 
             damkaUIForm.ShowDialog();           
         }
