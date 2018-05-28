@@ -1,11 +1,17 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using Ex04.Damka.Logic;
+using System;
 
 namespace Ex04.Damka.FormUI
 {   
     public class FormDamkaBoard : Form
     {
+        void NewButton_Click(object sender, System.EventArgs e)
+        {
+        }
+
+
         private const byte k_Width = 40;
         private const byte k_Height = 40;
         private const byte k_BoardLocationX = 40;
@@ -67,6 +73,7 @@ namespace Ex04.Damka.FormUI
                         if(currCol % 2 != 0)
                         {
                             newButton.BackColor = whiteCell;
+                            newButton.Click += new EventHandler(selectBoardButton_Click);
                         }
                         else
                         {
@@ -79,6 +86,7 @@ namespace Ex04.Damka.FormUI
                         if (currCol % 2 == 0)
                         {
                             newButton.BackColor = whiteCell;
+                            newButton.Click += new EventHandler(selectBoardButton_Click);
                         }
                         else
                         {
@@ -93,12 +101,31 @@ namespace Ex04.Damka.FormUI
             initControls();
         }
 
+        private void selectBoardButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            if(button.Text != " ")
+            {
+                button.BackColor = Color.LightBlue;
+                button.Click -= selectBoardButton_Click;
+                button.Click += new EventHandler(deselectBoardButton_Click);
+            }
+        }
+
+        private void deselectBoardButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            button.BackColor = Color.White;
+            button.Click -= deselectBoardButton_Click;
+            button.Click += new EventHandler(selectBoardButton_Click);
+        }
+
         private void initControls()
         {
             m_FirstPlayerLabel.Text = "Player 1:";
             m_FirstPlayerLabel.Location = new Point(70, 20);
-            //m_FirstPlayerScoreLabel.Text = "0";
-            //m_FirstPlayerScoreLabel.Location = new Point(177, 20);
+            m_FirstPlayerScoreLabel.Text = "0";
+            m_FirstPlayerScoreLabel.Location = new Point(177, 20);
 
             m_SecPlayerLabel.Text = "Player 2:";
             m_SecPlayerLabel.Location = new Point(200, 20);

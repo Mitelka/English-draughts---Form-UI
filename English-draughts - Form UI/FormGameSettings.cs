@@ -68,10 +68,10 @@ namespace Ex04.Damka.FormUI
             Controls.AddRange(new Control[] { m_PlayersLabel, m_SecPlayerNameText, m_FirstPlayerNameText, m_BoardSizeLabel, m_FirstPlayerLabel, m_SecPlayerLabel, m_DoneButton, m_6X6Size, m_8X8Size, m_10X10Size, m_SecPlayerCheckBox });
 
             m_SecPlayerCheckBox.Click += new EventHandler(checkBoxButton_Click);
-            m_DoneButton.Click += new EventHandler(done_Click);
+            m_DoneButton.Click += new EventHandler(doneButton_Click);
         }
 
-        private void done_Click(object sender, EventArgs e)
+        private void doneButton_Click(object sender, EventArgs e)
         {
             if (!m_6X6Size.Checked && !m_8X8Size.Checked && !m_10X10Size.Checked)
             {
