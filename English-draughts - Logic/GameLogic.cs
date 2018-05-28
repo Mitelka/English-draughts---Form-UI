@@ -11,11 +11,11 @@ namespace Ex04.Damka.Logic
         private eGameResult m_GameResult;
         private readonly Board m_GameBoard;
 
-        public GameLogic(Player[] i_players, byte i_boardSize, eGameType i_gameType)
+        public GameLogic(Player[] i_Players, byte i_BoardSize, eGameType i_GameType)
         {
-            m_Players = i_players;
-            m_BoardSize = i_boardSize;
-            m_GameType = i_gameType;
+            m_Players = i_Players;
+            m_BoardSize = i_BoardSize;
+            m_GameType = i_GameType;
             m_GameBoard = new Board(m_BoardSize);
             InitializeTokens();
         }
@@ -23,7 +23,6 @@ namespace Ex04.Damka.Logic
         public Board GameBoard { get => m_GameBoard; }
 
         public eGameResult GameResult { get => m_GameResult; }
-
 
         public void InitializeTokens()
         {
@@ -361,7 +360,7 @@ namespace Ex04.Damka.Logic
                 }
             }
 
-            m_Players[i_WinnerIdx].Score = m_Players[i_WinnerIdx].NumOfTokens - m_Players[otherPlayerIdx].NumOfTokens;
+            m_Players[i_WinnerIdx].Score += m_Players[i_WinnerIdx].NumOfTokens - m_Players[otherPlayerIdx].NumOfTokens;
         }
 
         public int GetWinnerOfAllGamesIndex()
@@ -456,7 +455,7 @@ namespace Ex04.Damka.Logic
 
             playerCurrScore = m_Players[i_PlayerIndex].Score + m_Players[i_PlayerIndex].NumOfTokens;
             otherPlayerCurrScore = m_Players[otherPlayerIdx].Score + m_Players[otherPlayerIdx].NumOfTokens;
-            if(playerCurrScore < otherPlayerCurrScore)
+            if(playerCurrScore <= otherPlayerCurrScore)
             {
                 isEligToQuit = true;
             }
