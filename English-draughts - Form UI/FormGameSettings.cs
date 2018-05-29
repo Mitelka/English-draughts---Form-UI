@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
-
+using Ex04.Damka.Logic;
 namespace Ex04.Damka.FormUI
 {
     public class FormGameSettings : Form
@@ -18,6 +19,9 @@ namespace Ex04.Damka.FormUI
         private readonly RadioButton m_8X8Size = new RadioButton();
         private readonly RadioButton m_10X10Size = new RadioButton();
         private bool m_IsSecondPlayerComputer = true;
+        private byte m_BoardSize;
+        private GameLogic m_GameLogic;
+        private FormDamkaBoard m_FormBoard;
 
         public FormGameSettings()
         {
@@ -28,10 +32,15 @@ namespace Ex04.Damka.FormUI
             Text = "Game Settings";
         }
 
+        public GameLogic Logic
+        {
+            get => m_GameLogic;
+            set => m_GameLogic = value;
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
             initControls();
         }
 
@@ -73,19 +82,42 @@ namespace Ex04.Damka.FormUI
 
         private void doneButton_Click(object sender, EventArgs e)
         {
+            if(checkSettingsAreValid())
+            {
+                initializeGameLogicAndGameForm();
+                m_FormBoard.ShowDialog();
+                Close();
+            }
+        }
+
+        private void initializeGameLogicAndGameForm()
+        {
+            Player playerOne = new Player(ePlayerType.Human, eSign.O, m_FirstPlayerLabel.Text);
+            Player playerTwo = new Player(m_IsSecondPlayerComputer ? ePlayerType.Computer : ePlayerType.Human, eSign.X, m_SecPlayerNameText.Text);
+            Player[] players = new Player[2];
+            players[0] = playerOne;
+            players[1] = playerTwo;
+
+            m_GameLogic = new GameLogic(players, m_BoardSize, m_IsSecondPlayerComputer ? eGameType.HumanVsComputer : eGameType.HumanVsHuman);
+            m_FormBoard = new FormDamkaBoard(m_BoardSize, m_GameLogic);
+
+        }
+
+        private bool checkSettingsAreValid()
+        {
+            bool settingsValid = false;
             if (!m_6X6Size.Checked && !m_8X8Size.Checked && !m_10X10Size.Checked)
             {
                 const string message = "You must Choose Board Size!";
                 MessageBox.Show(message);
             }
-
-            if (string.IsNullOrEmpty(m_FirstPlayerNameText.Text))
+            else if (string.IsNullOrEmpty(m_FirstPlayerNameText.Text))
             {
                 const string message = "Player 1 Name can't be empty";
                 MessageBox.Show(message);
             }
 
-            if (m_SecPlayerCheckBox.Checked && string.IsNullOrEmpty(m_SecPlayerNameText.Text))
+            else if (m_SecPlayerCheckBox.Checked && string.IsNullOrEmpty(m_SecPlayerNameText.Text))
             {
                 const string message = "Player 2 Name can't be empty";
                 MessageBox.Show(message);
@@ -94,25 +126,25 @@ namespace Ex04.Damka.FormUI
             {
                 if (m_6X6Size.Checked)
                 {
-                    BoardSize = 6;
+                    m_BoardSize = 6;
                 }
                 else if (m_8X8Size.Checked)
                 {
-                    BoardSize = 8;
+                    m_BoardSize = 8;
                 }
                 else
                 {
-                    BoardSize = 10;
+                    m_BoardSize = 10;
                 }
 
                 if (m_SecPlayerCheckBox.Checked)
                 {
                     m_IsSecondPlayerComputer = false;
                 }
-
-                Close();
-                createBoardForm();
+                settingsValid = true;
             }
+
+            return settingsValid;
         }
 
         private void checkBoxButton_Click(object sender, EventArgs e)
@@ -139,12 +171,7 @@ namespace Ex04.Damka.FormUI
             set { m_SecPlayerNameText.Text = value; }
         }
 
-        public byte BoardSize { get; set; }
+        public byte BoardSize { get => m_BoardSize; }
 
-        private void createBoardForm()
-        {           
-            FormDamkaBoard newFormBoard = new FormDamkaBoard(m_FirstPlayerNameText.Text, m_SecPlayerNameText.Text, m_SecPlayerCheckBox.Checked, BoardSize);
-            newFormBoard.ShowDialog();
-        }
     }
 }

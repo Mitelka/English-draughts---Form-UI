@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Ex04.Damka.Logic
 { 
+    public delegate void CellChosenEventHandler(object sender, CellChosenEventArgs e);
+
     public class GameLogic
     {
         private readonly Board m_GameBoard;
@@ -10,6 +12,8 @@ namespace Ex04.Damka.Logic
         private byte m_BoardSize;
         private eGameType m_GameType;
         private eGameResult m_GameResult;      
+
+        public event CellChosenEventHandler CellChosen;
 
         public GameLogic(Player[] i_Players, byte i_BoardSize, eGameType i_GameType)
         {
@@ -294,6 +298,15 @@ namespace Ex04.Damka.Logic
             m_GameBoard[i_OriginCell] = i_OriginCell;
             m_GameBoard[i_OriginCell].CellSign = eSign.Empty;
             m_GameBoard[i_DestCell] = i_DestCell;
+
+            CellChosenEventArgs e =
+                new CellChosenEventArgs
+                {
+                    m_CellSign = i_DestCell.CellSign,
+                  //  m_CellIndex = Board.GetCellIndexInBoard(i_CurrentMove)
+                };
+
+       //     OnCellChosen(e);
         }
 
         public bool CheckDoubleEatingMove(Cell newCellAfterFirstEating, int i_playerIndex)
