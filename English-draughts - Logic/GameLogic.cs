@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ex04.Damka.Logic
 { 
-    public delegate void CellChosenEventHandler(object sender, CellChosenEventArgs e);
+    public delegate void CellChosenEventHandler(object sender, CellsChosenEventArgs e);
 
     public class GameLogic
     {
@@ -299,14 +299,21 @@ namespace Ex04.Damka.Logic
             m_GameBoard[i_OriginCell].CellSign = eSign.Empty;
             m_GameBoard[i_DestCell] = i_DestCell;
 
-            CellChosenEventArgs e =
-                new CellChosenEventArgs
+            CellsChosenEventArgs e =
+                new CellsChosenEventArgs
                 {
-                    m_CellSign = i_DestCell.CellSign,
-                  //  m_CellIndex = Board.GetCellIndexInBoard(i_CurrentMove)
+                    m_OriginCellSign = i_OriginCell.CellSign,
+                    m_OriginCellIndex = i_OriginCell.CellCol,
+                    m_DestCellSign = i_DestCell.CellSign,
+                    m_DestCellIndex = i_DestCell.CellCol
                 };
 
-       //     OnCellChosen(e);
+            OnCellChosen(e);
+        }
+
+        protected virtual void OnCellChosen(CellsChosenEventArgs e)
+        {
+            this.CellChosen?.Invoke(this, e);
         }
 
         public bool CheckDoubleEatingMove(Cell newCellAfterFirstEating, int i_playerIndex)
