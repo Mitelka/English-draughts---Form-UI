@@ -130,7 +130,13 @@ namespace Ex04.Damka.FormUI
                     else
                     {
                         MessageBox.Show("Invalid move, please try again!");
+                        playerHasAnotherTurn = true;
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid move, please try again!");
+                    playerHasAnotherTurn = true;
                 }
 
                 if (r_GameLogic.GameType == eGameType.HumanVsComputer && !m_IsGameFinished && !playerHasAnotherTurn)
@@ -167,6 +173,10 @@ namespace Ex04.Damka.FormUI
                     }
 
                 }
+                else
+                {
+                    playerHasAnotherTurn = false;
+                }
                 r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
             }
             m_CurrPlayerIndexTurn = r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
@@ -202,7 +212,9 @@ namespace Ex04.Damka.FormUI
 
         private void showResults(string i_Result)
         {
-            if(MessageBox.Show("Damka", i_Result + "\nAnother Round?", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.AppendLine(i_Result).Append("Another Round?");
+            if(MessageBox.Show("Damka", stringBuilder.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
                 resetRound();
             }
