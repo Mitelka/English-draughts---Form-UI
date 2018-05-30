@@ -25,11 +25,12 @@ namespace Ex04.Damka.Logic
         {
             bool isValidInput = false;
             o_ParsedCell = null;
+            int rowNum, colNum;
             if(i_Input.Length == k_LegalNumberOfInput)
             {
-                if(char.IsUpper(i_Input[0]) && char.IsLower(i_Input[1]))
+                   if(int.TryParse(i_Input[0].ToString(), out rowNum) && int.TryParse(i_Input[1].ToString(), out colNum))
                 {
-                    o_ParsedCell = new Cell((byte)(i_Input[1] - 'a'), (byte)(i_Input[0] - 'A'), eSign.Empty);
+                    o_ParsedCell = new Cell((byte)rowNum, (byte)colNum, eSign.Empty);
                     isValidInput = true;
                 }
             }

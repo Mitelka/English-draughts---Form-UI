@@ -304,10 +304,8 @@ namespace Ex04.Damka.Logic
             CellsChosenEventArgs e =
                 new CellsChosenEventArgs
                 {
-                    m_OriginCellSign = i_OriginCell.CellSign,
-                    m_OriginCell = i_OriginCell,
+                    m_DestCell = i_DestCell,
                     m_DestCellSign = i_DestCell.CellSign,
-                    m_DestCell = i_DestCell
                 };
 
             OnCellChosen(e);
