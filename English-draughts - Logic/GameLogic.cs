@@ -270,8 +270,8 @@ namespace Ex04.Damka.Logic
 
         public void MakeMoveOnBoard(Cell i_OriginCell, Cell i_DestCell, int i_PlayerIndex, out bool o_IsKingFlag, out bool o_DidEat)
         {
-            int middleRow;
-            int middleCol;
+            int middleRow = 0;
+            int middleCol = 0;
             o_DidEat = false;
             eSign kingSign;
             o_IsKingFlag = false;
@@ -306,6 +306,7 @@ namespace Ex04.Damka.Logic
                 {
                     m_DestCell = i_DestCell,
                     m_DestCellSign = i_DestCell.CellSign,
+                    m_EatenCell = o_DidEat ? m_GameBoard[(byte)middleRow, (byte)middleCol] : null
                 };
 
             OnCellChosen(e);

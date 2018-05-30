@@ -109,7 +109,6 @@ namespace Ex04.Damka.FormUI
                 bool validOriginCell = Cell.Parse(((Button)m_OriginCell).Name, out clickedOriginCell);
                 bool validDestCell = Cell.Parse(destButton.Name, out clickedDestCell);
 
-
                 r_GameLogic.UpdateAllOptionalCellMove(m_CurrPlayerIndexTurn, r_GameLogic.Players[m_CurrPlayerIndexTurn].Sign, ref didEat);
                 if (destButton.Enabled && validOriginCell && validDestCell && r_GameLogic.AreCellsLegal(clickedOriginCell, clickedDestCell, r_GameLogic.Players[m_CurrPlayerIndexTurn].Sign, ref didEat))
                 {
@@ -194,7 +193,6 @@ namespace Ex04.Damka.FormUI
             else if(r_GameLogic.GameResult == eGameResult.TIE)
             {
                 showTieResults();
-                
             }
         }
 
@@ -214,7 +212,7 @@ namespace Ex04.Damka.FormUI
         {
             System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
             stringBuilder.AppendLine(i_Result).Append("Another Round?");
-            if(MessageBox.Show("Damka", stringBuilder.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            if(MessageBox.Show(stringBuilder.ToString(), "Damka", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
                 resetRound();
             }
@@ -235,15 +233,19 @@ namespace Ex04.Damka.FormUI
 
         private void cellButton_PrintingMove(object i_Sender, CellsChosenEventArgs i_E)
         {
-            Button button = i_Sender as Button;
-            changeCellButtonAppearance(i_E.m_DestCell.CellRow, i_E.m_DestCell.CellCol);
+            changeCellButtonAppearance(i_E.m_DestCell, i_E.m_EatenCell);
+
         }
 
-        private void changeCellButtonAppearance(int i_DestCellRow, int i_DestCellCol)
+        private void changeCellButtonAppearance(Cell i_DestCell, Cell i_EatenCell)
         {
             m_OriginCell.BackColor = Color.White;
-            m_DamkaBoard[i_DestCellRow, i_DestCellCol].Text = m_OriginCell.Text;
+            m_DamkaBoard[i_DestCell.CellRow, i_DestCell.CellCol].Text = getSignToPrint(r_GameLogic.GameBoard[i_DestCell].CellSign);
             m_OriginCell.Text = " ";
+            if(i_EatenCell != null)
+            {
+                m_DamkaBoard[i_EatenCell.CellRow, i_EatenCell.CellCol].Text = " ";
+            }
 
          }
 
