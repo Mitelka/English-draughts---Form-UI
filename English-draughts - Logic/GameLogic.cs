@@ -10,7 +10,7 @@ namespace Ex04.Damka.Logic
         private readonly Board m_GameBoard;
         private readonly Player[] m_Players;
         private byte m_BoardSize;
-        private eGameType m_GameType;
+        private readonly eGameType m_GameType;
         private eGameResult m_GameResult;      
 
         public event CellChosenEventHandler CellChosen;
@@ -29,6 +29,8 @@ namespace Ex04.Damka.Logic
         public Player[] Players { get => m_Players; }
 
         public eGameResult GameResult { get => m_GameResult; }
+
+        public eGameType GameType { get => m_GameType; }
 
         public void InitializeTokens()
         {
@@ -303,9 +305,9 @@ namespace Ex04.Damka.Logic
                 new CellsChosenEventArgs
                 {
                     m_OriginCellSign = i_OriginCell.CellSign,
-                    m_OriginCellIndex = i_OriginCell.CellCol,
+                    m_OriginCell = i_OriginCell,
                     m_DestCellSign = i_DestCell.CellSign,
-                    m_DestCellIndex = i_DestCell.CellCol
+                    m_DestCell = i_DestCell
                 };
 
             OnCellChosen(e);

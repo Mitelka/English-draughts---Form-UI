@@ -20,17 +20,21 @@ namespace Ex04.Damka.FormUI
         private Button[,] m_DamkaBoard;
         private FormGameSettings m_FormSettings = new FormGameSettings();
         private Button m_OriginCell;
+        private int m_CurrPlayerIndexTurn;
+        private bool m_IsGameFinished = false;
 
         public FormDamkaBoard(byte i_BoardSize, GameLogic i_GameLogic)
         {
-            BackColor = Color.LightGray;
+            BackColor = Color.LightGray; 
+            //ClientSize = (i_BoardSize* 50) + k_BoardLocationX, (i_BoardSize * 50) + k_BoardLocationY);
+
             Size = new Size((i_BoardSize * 50) + k_BoardLocationX, (i_BoardSize * 50) + k_BoardLocationY);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Damka";
             r_GameLogic = i_GameLogic;
-            //r_GameLogic.CellChosen += cellButton_PrintingMove;
-            //r_GameLogic.CellChosen += cellButton_CheckingGameOver;
+           // r_GameLogic.CellChosen += cellButton_PrintingMove;
+            r_GameLogic.CellChosen += cellButton_CheckingGameOver;
             createFormBoard(i_BoardSize);
         }
 
@@ -94,57 +98,117 @@ namespace Ex04.Damka.FormUI
 
         internal void CellButton_Click(object sender, EventArgs e)
         {
-            Cell clickedCell;
-            bool validCell = Cell.Parse(((Button)sender).Name, out clickedCell);
+            Cell clickedOriginCell, clickedDestCell;
+            bool didEat = false;
+            bool isKing;
+            bool playerHasAnotherTurn = false;
+            Button destButton = sender as Button;
+            bool validOriginCell = Cell.Parse(((Button)m_OriginCell).Name, out clickedOriginCell);
+            bool validDestCell = Cell.Parse(destButton.Name, out clickedDestCell);
 
-            Button button = (Button)sender;
-            //if (button != null && button.Enabled && validCell)
-            //{
-            //    r_GameLogic.MakeMoveOnBoard(clickedCell, m_PlayerIndexTurn);
-            //}
+            r_GameLogic.UpdateAllOptionalCellMove(m_CurrPlayerIndexTurn, r_GameLogic.Players[m_CurrPlayerIndexTurn].Sign, ref didEat);
+            if (destButton.Enabled && validOriginCell && validDestCell && r_GameLogic.AreCellsLegal(clickedOriginCell, clickedDestCell, r_GameLogic.Players[m_CurrPlayerIndexTurn].Sign, ref didEat))
+            {
+                if (r_GameLogic.CheckIfCellsInThePossibleList(clickedOriginCell, clickedDestCell, m_CurrPlayerIndexTurn))
+                {
+                    r_GameLogic.MakeMoveOnBoard(clickedOriginCell, clickedDestCell, m_CurrPlayerIndexTurn, out isKing, out didEat);
+                    if (didEat)
+                    {
+                        if (r_GameLogic.CheckDoubleEatingMove(clickedDestCell, m_CurrPlayerIndexTurn))
+                        {
+                            playerHasAnotherTurn = true;   
+                        }
 
-            //if (r_GameLogic.GameType == eGameType.PersonVsComputer && !this.m_IsGameFinished)
-            //{
-            //    this.m_PlayerIndexTurn = GameLogic.GetOtherPlayerIndex(this.m_PlayerIndexTurn);
-            //    this.HandleComputerMove();
-            //}
-            //else if (this.r_GameLogic.GameType == eGameType.PersonVsPerson)
-            //{
-            //    this.m_PlayerIndexTurn = GameLogic.GetOtherPlayerIndex(this.m_PlayerIndexTurn);
-            //}
+                    }
+                    r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid move, please try again!");
+                }
+            }
+
+            if (r_GameLogic.GameType == eGameType.HumanVsComputer && !m_IsGameFinished && !playerHasAnotherTurn)
+            {
+                m_CurrPlayerIndexTurn = r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
+                handleComputerMove();
+            }
+            else if(r_GameLogic.GameType == eGameType.HumanVsHuman && !playerHasAnotherTurn)
+            {
+                m_CurrPlayerIndexTurn = r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
+            }
         }
 
-        //private void cellButton_CheckingGameOver(object i_Sender, CellsChosenEventArgs i_E)
-        //{
-        //    Cell.Parse(r_CellButtons[i_E.m_CellIndex].Name, out Cell clickedCell);
+        private void handleComputerMove()
+        {
+            throw new NotImplementedException();
+        }
 
-        //    m_IsGameFinished = this.r_GameLogic.CheckEndGame(clickedCell, this.m_CurrentNumOfMoves, this.m_PlayerIndexTurn);
+        private void cellButton_CheckingGameOver(object i_Sender, CellsChosenEventArgs i_E)
+        {
+            m_IsGameFinished = r_GameLogic.CheckIfGameOver(i_E.m_DestCell, m_CurrPlayerIndexTurn);
 
-        //    if (m_IsGameFinished)
-        //    {
-        //        byte winnerPlayerIndex = GameLogic.GetOtherPlayerIndex(this.m_PlayerIndexTurn);
-        //        this.showResults(winnerPlayerIndex);
-        //        this.resetRound();
-        //    }
-        //}
+            if (r_GameLogic.GameResult == eGameResult.WINNER)
+            {
+                r_GameLogic.UpdatePlayersScore(m_CurrPlayerIndexTurn);
+                showWinnerResult(r_GameLogic.GetWinnerOfAllGamesIndex());
+            }
+            else if(r_GameLogic.GameResult == eGameResult.TIE)
+            {
+                showTieResults();
+                
+            }
+        }
+
+        private void showTieResults()
+        {
+            showResults("Tie!");
+        }
+
+        private void showWinnerResult(int i_WinnerIndex)
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append("Player ").Append(i_WinnerIndex).Append(" Won!");
+            showResults(stringBuilder.ToString());
+        }
+
+        private void showResults(string i_Result)
+        {
+            if(MessageBox.Show(i_Result, "Another Round?", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            {
+                resetRound();
+            }
+            else
+            {
+                m_IsGameFinished = true;
+                Close();
+            }
+        }
+
+        private void resetRound()
+        {
+            r_GameLogic.GameBoard.ResetBoard();
+            r_GameLogic.InitializeTokens();
+            m_IsGameFinished = false;
+          
+        }
 
         //private void cellButton_PrintingMove(object i_Sender, CellsChosenEventArgs i_E)
         //{
         //    changeCellButtonAppearance(r_CellButtons[i_E.m_CellIndex], i_E.m_CellSign);
-        //    BoldCurrentPlayerName(false);
         //}
 
-        //private void changeCellButtonAppearance(Button i_CellButton, eSign i_PlayerSign)
-        //{
-        //    i_CellButton.Enabled = false;
-        //    i_CellButton.BackgroundImage = i_PlayerSign == eSign.O ? Resources.O : Resources.X;
-        //    i_CellButton.BackgroundImageLayout = ImageLayout.Stretch;
-        //}
+        private void changeCellButtonAppearance(Button i_CellButton, eSign i_PlayerSign)
+        {
+            i_CellButton.Enabled = false;
+           // i_CellButton.BackgroundImage = i_PlayerSign == eSign.O ? Resources.O : Resources.X;
+            i_CellButton.BackgroundImageLayout = ImageLayout.Stretch;
+        }
 
+        //updates and selects the origin cell
         private void selectBoardButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-         //   bool isAnotherButtonClicked = false;
             if(button.Text != " ")
             {
                 button.BackColor = Color.LightBlue;
@@ -156,7 +220,6 @@ namespace Ex04.Damka.FormUI
                 }
 
                 m_OriginCell = button;
-
             }
             //else
             //{
@@ -189,14 +252,16 @@ namespace Ex04.Damka.FormUI
         private void initControls()
         {
             m_FirstPlayerLabel.Text = "Player 1:";
-            m_FirstPlayerLabel.Location = new Point(70, 20);
+            m_FirstPlayerLabel.Location = new Point(m_DamkaBoard[0,0].Left + 12, 20);
+            m_FirstPlayerLabel.AutoSize = true;
             m_FirstPlayerScoreLabel.Text = "0";
-            m_FirstPlayerScoreLabel.Location = new Point(177, 20);
+            m_FirstPlayerScoreLabel.Location = new Point(m_FirstPlayerLabel.Left + m_FirstPlayerLabel.Width, m_FirstPlayerLabel.Top);
 
             m_SecPlayerLabel.Text = "Player 2:";
-            m_SecPlayerLabel.Location = new Point(200, 20);
+            m_SecPlayerLabel.Location = new Point(m_FirstPlayerScoreLabel.Left + m_FirstPlayerScoreLabel.Width + 12, m_FirstPlayerLabel.Top);
+            m_SecPlayerLabel.AutoSize = true;
             m_SecPlayerScoreLabel.Text = "0";
-            m_SecPlayerScoreLabel.Location = new Point(250, 20);
+            m_SecPlayerScoreLabel.Location = new Point(m_SecPlayerLabel.Left + m_SecPlayerLabel.Width, m_FirstPlayerLabel.Top);
 
             Controls.AddRange(new Control[] { m_FirstPlayerLabel, m_FirstPlayerScoreLabel, m_SecPlayerLabel, m_SecPlayerScoreLabel });
         }

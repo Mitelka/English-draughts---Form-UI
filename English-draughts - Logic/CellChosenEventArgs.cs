@@ -3,9 +3,9 @@
     public class CellsChosenEventArgs
     {
         public eSign m_OriginCellSign;
-        public byte m_OriginCellIndex;
+        public Cell m_OriginCell;
         public eSign m_DestCellSign;
-        public byte m_DestCellIndex;
+        public Cell m_DestCell;
     }
 }
   
