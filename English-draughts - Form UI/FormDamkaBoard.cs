@@ -163,12 +163,38 @@ namespace Ex04.Damka.FormUI
                 if (r_GameLogic.GameResult == eGameResult.WINNER)
                 {
                     r_GameLogic.UpdatePlayersScore(m_CurrPlayerIndexTurn);
+                    updateWinnerScore(m_CurrPlayerIndexTurn);
                     showWinnerResult(r_GameLogic.GetWinnerOfAllGamesIndex());
                 }
                 else if (r_GameLogic.GameResult == eGameResult.TIE)
                 {
                     showTieResults();
                 }
+            }
+        }
+
+        private void updateWinnerScore(int i_WinnerIndex)
+        {
+            Label labelToUpdate;
+            int newScore;
+            bool isScoreValid;
+            if(i_WinnerIndex == 0)
+            {
+                labelToUpdate = m_FirstPlayerScoreLabel;
+            }
+            else
+            {
+                labelToUpdate = m_SecPlayerScoreLabel;
+            }
+            isScoreValid = int.TryParse(labelToUpdate.Text, out newScore);
+            if(isScoreValid)
+            {
+                newScore += r_GameLogic.Players[i_WinnerIndex].Score;
+                labelToUpdate.Text = newScore.ToString();
+            }
+            else
+            {
+                MessageBox.Show("Invalid score");
             }
         }
 
@@ -180,7 +206,7 @@ namespace Ex04.Damka.FormUI
         private void showWinnerResult(int i_WinnerIndex)
         {
             System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append("Player ").Append(i_WinnerIndex).Append(" Won!");
+            stringBuilder.Append("Player ").Append(i_WinnerIndex + 1).Append(" Won!");
             showResults(stringBuilder.ToString());
         }
 
