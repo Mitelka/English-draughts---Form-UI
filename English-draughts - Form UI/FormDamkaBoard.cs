@@ -26,8 +26,6 @@ namespace Ex04.Damka.FormUI
         public FormDamkaBoard(byte i_BoardSize, GameLogic i_GameLogic)
         {
             BackColor = Color.LightGray; 
-            //ClientSize = (i_BoardSize* 50) + k_BoardLocationX, (i_BoardSize * 50) + k_BoardLocationY);
-
             Size = new Size((i_BoardSize * 50) + k_BoardLocationX, (i_BoardSize * 50) + k_BoardLocationY);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             StartPosition = FormStartPosition.CenterScreen;
@@ -59,40 +57,12 @@ namespace Ex04.Damka.FormUI
                         Name = $"{currRow}{currCol}",
                     };
 
-                    newButton.Text = getSignToPrint(r_GameLogic.GameBoard[currRow, currCol].CellSign);
-                    if (currRow % 2 == 0)
-                    {
-                        if(currCol % 2 != 0)
-                        {
-                            newButton.BackColor = whiteCell;
-                            newButton.Click += new EventHandler(selectBoardButton_Click);
-                        }
-                        else
-                        {
-                            newButton.BackColor = grayCell;
-                            newButton.Enabled = false;
-                        }
-                    }
-                    else
-                    {
-                        if (currCol % 2 == 0)
-                        {
-                            newButton.BackColor = whiteCell;
-                            newButton.Click += new EventHandler(selectBoardButton_Click);
-                        }
-                        else
-                        {
-                            newButton.BackColor = grayCell;
-                            newButton.Enabled = false;
-                        }
-                    }
-
-                    //newButton.Click += CellButton_Click;
                     Controls.Add(newButton);
                     m_DamkaBoard[currRow, currCol] = newButton;
                 }
-            }
 
+            }
+            resetBoardValues();
             initControls();
         }
 
@@ -114,17 +84,19 @@ namespace Ex04.Damka.FormUI
                 {
                     if (r_GameLogic.CheckIfCellsInThePossibleList(clickedOriginCell, clickedDestCell, m_CurrPlayerIndexTurn))
                     {
-                        
                         r_GameLogic.MakeMoveOnBoard(clickedOriginCell, clickedDestCell, m_CurrPlayerIndexTurn, out isKing, out didEat);
-                        if (didEat)
+                        if (!m_IsGameFinished)
                         {
-                            if (r_GameLogic.CheckDoubleEatingMove(clickedDestCell, m_CurrPlayerIndexTurn))
+                            if (didEat)
                             {
-                                playerHasAnotherTurn = true;
-                            }
+                                if (r_GameLogic.CheckDoubleEatingMove(clickedDestCell, m_CurrPlayerIndexTurn))
+                                {
+                                    playerHasAnotherTurn = true;
+                                }
 
+                            }
+                            r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
                         }
-                        r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
                     }
                     else
                     {
@@ -144,11 +116,12 @@ namespace Ex04.Damka.FormUI
                     m_CurrPlayerIndexTurn = r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
                     handleComputerMove();
                 }
-                else if (r_GameLogic.GameType == eGameType.HumanVsHuman && !playerHasAnotherTurn)
+                else if (r_GameLogic.GameType == eGameType.HumanVsHuman && !m_IsGameFinished && !playerHasAnotherTurn)
                 {
                     m_OriginCell = null;
                     m_CurrPlayerIndexTurn = r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
                 }
+
             }
         }
 
@@ -164,35 +137,40 @@ namespace Ex04.Damka.FormUI
                 r_GameLogic.SetComputerMove(m_CurrPlayerIndexTurn, out o_LegalOriginCell, out o_LegalDestCell, ref didEat);
                 m_OriginCell = m_DamkaBoard[o_LegalOriginCell.CellRow, o_LegalOriginCell.CellCol];
                 r_GameLogic.MakeMoveOnBoard(o_LegalOriginCell, o_LegalDestCell, m_CurrPlayerIndexTurn, out isKing, out didEat);
-                if (didEat)
+                if (!m_IsGameFinished)
                 {
-                    if (!r_GameLogic.CheckDoubleEatingMove(o_LegalDestCell, m_CurrPlayerIndexTurn))
+                    if (didEat && !r_GameLogic.CheckDoubleEatingMove(o_LegalDestCell, m_CurrPlayerIndexTurn))
                     {
                         playerHasAnotherTurn = false;
                     }
-
+                    else if(!didEat)
+                    {
+                        playerHasAnotherTurn = false;
+                    }
+                    r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
                 }
                 else
                 {
                     playerHasAnotherTurn = false;
                 }
-                r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
             }
-            m_CurrPlayerIndexTurn = r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
+            m_CurrPlayerIndexTurn = m_IsGameFinished ? m_CurrPlayerIndexTurn : r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
         }
 
         private void cellButton_CheckingGameOver(object i_Sender, CellsChosenEventArgs i_E)
         {
             m_IsGameFinished = r_GameLogic.CheckIfGameOver(i_E.m_DestCell, m_CurrPlayerIndexTurn);
-
-            if (r_GameLogic.GameResult == eGameResult.WINNER)
+            if (m_IsGameFinished)
             {
-                r_GameLogic.UpdatePlayersScore(m_CurrPlayerIndexTurn);
-                showWinnerResult(r_GameLogic.GetWinnerOfAllGamesIndex());
-            }
-            else if(r_GameLogic.GameResult == eGameResult.TIE)
-            {
-                showTieResults();
+                if (r_GameLogic.GameResult == eGameResult.WINNER)
+                {
+                    r_GameLogic.UpdatePlayersScore(m_CurrPlayerIndexTurn);
+                    showWinnerResult(r_GameLogic.GetWinnerOfAllGamesIndex());
+                }
+                else if (r_GameLogic.GameResult == eGameResult.TIE)
+                {
+                    showTieResults();
+                }
             }
         }
 
@@ -218,23 +196,64 @@ namespace Ex04.Damka.FormUI
             }
             else
             {
-                m_IsGameFinished = true;
                 Close();
             }
         }
 
         private void resetRound()
         {
+            m_IsGameFinished = true;
+            m_OriginCell = null;
             r_GameLogic.GameBoard.ResetBoard();
+            m_CurrPlayerIndexTurn = 0;
             r_GameLogic.InitializeTokens();
-            m_IsGameFinished = false;
-          
+            resetBoardValues();
+        }
+
+        private void resetBoardValues()
+        {
+            var grayCell = Color.DarkGray;
+            var whiteCell = Color.White;
+            for (byte currRow = 0; currRow < r_GameLogic.GameBoard.BoardSize; currRow++)
+            {
+                for (byte currCol = 0; currCol < r_GameLogic.GameBoard.BoardSize; currCol++)
+                {
+                    m_DamkaBoard[currRow, currCol].Click -= selectBoardButton_Click;
+                    m_DamkaBoard[currRow, currCol].Click -= deselectBoardButton_Click;
+                    m_DamkaBoard[currRow, currCol].Text = getSignToPrint(r_GameLogic.GameBoard[currRow, currCol].CellSign);
+                    if (currRow % 2 == 0)
+                    {
+                        if (currCol % 2 != 0)
+                        {
+                            m_DamkaBoard[currRow, currCol].BackColor = whiteCell;
+                            m_DamkaBoard[currRow, currCol].Click += new EventHandler(selectBoardButton_Click);
+                        }
+                        else
+                        {
+                            m_DamkaBoard[currRow, currCol].BackColor = grayCell;
+                            m_DamkaBoard[currRow, currCol].Enabled = false;
+                        }
+                    }
+                    else
+                    {
+                        if (currCol % 2 == 0)
+                        {
+                            m_DamkaBoard[currRow, currCol].BackColor = whiteCell;
+                            m_DamkaBoard[currRow, currCol].Click += new EventHandler(selectBoardButton_Click);
+                        }
+                        else
+                        {
+                            m_DamkaBoard[currRow, currCol].BackColor = grayCell;
+                            m_DamkaBoard[currRow, currCol].Enabled = false;
+                        }
+                    }
+                }
+            }
         }
 
         private void cellButton_PrintingMove(object i_Sender, CellsChosenEventArgs i_E)
         {
             changeCellButtonAppearance(i_E.m_DestCell, i_E.m_EatenCell);
-
         }
 
         private void changeCellButtonAppearance(Cell i_DestCell, Cell i_EatenCell)
@@ -267,7 +286,7 @@ namespace Ex04.Damka.FormUI
             else
             {
                 cellButtonClicked(button);
-                
+
             }
         }
 
@@ -322,20 +341,5 @@ namespace Ex04.Damka.FormUI
 
             return signChar.ToString();
         }
-
-        //private void setPossibleButtonsUI(byte i_playerIndex)
-        //{
-        //    bool o_DidEat = false;
-        //    m_GameLogic.UpdateAllOptionalCellMove(i_playerIndex, m_GameLogic.Players[i_playerIndex].Sign, ref o_DidEat);
-        //    List<Player.PlayerMovelist> PlayerMoveList = m_GameLogic.Players[i_playerIndex].PlayerPotentialMoveslist;
-            
-        //    foreach(Player.PlayerMovelist Movelist in PlayerMoveList)
-        //    {
-        //        Button original = m_DamkaBoard[Movelist.originalCell.CellRow, Movelist.originalCell.CellCol];
-        //        Button desired = m_DamkaBoard[Movelist.desiredCell.CellRow, Movelist.desiredCell.CellCol];
-
-        //        //possibleButtons.Add(new PlayerButtonMovelist() { originalButton = original, desiredButton = desired });
-        //    }
-        //}
     }
 }
