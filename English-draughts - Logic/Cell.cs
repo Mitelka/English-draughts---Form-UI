@@ -28,7 +28,7 @@ namespace Ex04.Damka.Logic
             int rowNum, colNum;
             if(i_Input.Length == k_LegalNumberOfInput)
             {
-                   if(int.TryParse(i_Input[0].ToString(), out rowNum) && int.TryParse(i_Input[1].ToString(), out colNum))
+                if (int.TryParse(i_Input[0].ToString(), out rowNum) && int.TryParse(i_Input[1].ToString(), out colNum))
                 {
                     o_ParsedCell = new Cell((byte)rowNum, (byte)colNum, eSign.Empty);
                     isValidInput = true;

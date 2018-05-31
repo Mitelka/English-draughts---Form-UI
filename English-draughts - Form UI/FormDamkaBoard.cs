@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using Ex04.Damka.Logic;
 
 namespace Ex04.Damka.FormUI
-{   
+{
     public class FormDamkaBoard : Form
     {
         private const byte k_Width = 40;
@@ -18,7 +17,6 @@ namespace Ex04.Damka.FormUI
         private readonly Label m_SecPlayerScoreLabel = new Label();
         private readonly GameLogic r_GameLogic;
         private Button[,] m_DamkaBoard;
-        private FormGameSettings m_FormSettings = new FormGameSettings();
         private Button m_OriginCell;
         private int m_CurrPlayerIndexTurn;
         private bool m_IsGameFinished = false;
