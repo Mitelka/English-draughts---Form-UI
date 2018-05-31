@@ -157,8 +157,7 @@ namespace Ex04.Damka.FormUI
         }
 
         private void cellButton_CheckingGameOver(object i_Sender, CellsChosenEventArgs i_E)
-        {
-            
+        {        
             m_IsGameFinished = r_GameLogic.CheckIfGameOver(i_E.m_DestCell, m_CurrPlayerIndexTurn);
             if (m_IsGameFinished)
             {
