@@ -7,4 +7,3 @@
         public Cell m_EatenCell;
     }
 }
-  

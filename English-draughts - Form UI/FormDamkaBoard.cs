@@ -58,8 +58,8 @@ namespace Ex04.Damka.FormUI
                     Controls.Add(newButton);
                     m_DamkaBoard[currRow, currCol] = newButton;
                 }
-
             }
+
             resetBoardValues();
             initControls();
         }
@@ -91,8 +91,8 @@ namespace Ex04.Damka.FormUI
                                 {
                                     playerHasAnotherTurn = true;
                                 }
-
                             }
+
                             r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
                         }
                     }
@@ -119,7 +119,6 @@ namespace Ex04.Damka.FormUI
                     m_OriginCell = null;
                     m_CurrPlayerIndexTurn = r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
                 }
-
             }
         }
 
@@ -145,6 +144,7 @@ namespace Ex04.Damka.FormUI
                     {
                         playerHasAnotherTurn = false;
                     }
+
                     r_GameLogic.UpdatePlayerTokens(m_CurrPlayerIndexTurn, didEat, isKing);
                 }
                 else
@@ -152,6 +152,7 @@ namespace Ex04.Damka.FormUI
                     playerHasAnotherTurn = false;
                 }
             }
+
             m_CurrPlayerIndexTurn = m_IsGameFinished ? m_CurrPlayerIndexTurn : r_GameLogic.GetOtherPlayerIndex(m_CurrPlayerIndexTurn);
         }
 
@@ -186,8 +187,10 @@ namespace Ex04.Damka.FormUI
             {
                 labelToUpdate = m_SecPlayerScoreLabel;
             }
+
             isScoreValid = int.TryParse(labelToUpdate.Text, out newScore);
-            if(isScoreValid)
+
+            if (isScoreValid)
             {
                 newScore += r_GameLogic.Players[i_WinnerIndex].Score;
                 labelToUpdate.Text = newScore.ToString();
@@ -289,7 +292,6 @@ namespace Ex04.Damka.FormUI
             {
                 m_DamkaBoard[i_EatenCell.CellRow, i_EatenCell.CellCol].Text = " ";
             }
-
          }
 
         private void selectBoardButton_Click(object sender, EventArgs e)
@@ -310,7 +312,6 @@ namespace Ex04.Damka.FormUI
             else
             {
                 cellButtonClicked(button);
-
             }
         }
 
@@ -324,17 +325,19 @@ namespace Ex04.Damka.FormUI
 
         private void initControls()
         {
-            m_FirstPlayerLabel.Text = r_GameLogic.Players[0].PlayerName;
-            m_FirstPlayerLabel.Location = new Point(m_DamkaBoard[0,0].Left + 12, 20);
+            m_FirstPlayerLabel.Text = r_GameLogic.Players[0].PlayerName + ":";
+            m_FirstPlayerLabel.Location = new Point(m_DamkaBoard[0, 0].Left + 12, 20);
             m_FirstPlayerLabel.AutoSize = true;
             m_FirstPlayerScoreLabel.Text = "0";
-            m_FirstPlayerScoreLabel.Location = new Point(m_FirstPlayerLabel.Left + m_FirstPlayerLabel.Width, m_FirstPlayerLabel.Top);
+            m_FirstPlayerScoreLabel.Location = new Point(m_FirstPlayerLabel.Left + m_FirstPlayerLabel.Width - k_BoardLocationX, m_FirstPlayerLabel.Top);
+            m_FirstPlayerScoreLabel.AutoSize = true;
 
-            m_SecPlayerLabel.Text = r_GameLogic.Players[1].PlayerName;
-            m_SecPlayerLabel.Location = new Point(m_FirstPlayerScoreLabel.Left + m_FirstPlayerScoreLabel.Width + 12, m_FirstPlayerLabel.Top);
+            m_SecPlayerLabel.Text = r_GameLogic.Players[1].PlayerName + ":";
+            m_SecPlayerLabel.Location = new Point(m_FirstPlayerScoreLabel.Left + m_FirstPlayerScoreLabel.Width, m_FirstPlayerLabel.Top);
             m_SecPlayerLabel.AutoSize = true;
             m_SecPlayerScoreLabel.Text = "0";
             m_SecPlayerScoreLabel.Location = new Point(m_SecPlayerLabel.Left + m_SecPlayerLabel.Width, m_FirstPlayerLabel.Top);
+            m_SecPlayerScoreLabel.AutoSize = true;
 
             Controls.AddRange(new Control[] { m_FirstPlayerLabel, m_FirstPlayerScoreLabel, m_SecPlayerLabel, m_SecPlayerScoreLabel });
         }

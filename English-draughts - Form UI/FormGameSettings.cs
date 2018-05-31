@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using Ex04.Damka.Logic;
+
 namespace Ex04.Damka.FormUI
 {
     public class FormGameSettings : Form
@@ -26,7 +26,7 @@ namespace Ex04.Damka.FormUI
         public FormGameSettings()
         {
             BackColor = Color.LightBlue;
-            Size = new Size(300, 300);
+            Size = new Size(305, 300);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Game Settings";
@@ -56,13 +56,11 @@ namespace Ex04.Damka.FormUI
             m_8X8Size.Location = new Point(m_6X6Size.Left + m_6X6Size.Width + 10, m_6X6Size.Top);
             m_8X8Size.AutoSize = true;
             m_10X10Size.Text = "10X10";
-            m_10X10Size.Location = new Point(m_8X8Size.Left + m_8X8Size.Width+ 10, m_6X6Size.Top);
+            m_10X10Size.Location = new Point(m_8X8Size.Left + m_8X8Size.Width + 10, m_6X6Size.Top);
             m_10X10Size.AutoSize = true;
 
             m_PlayersLabel.Text = "Players:";
             m_PlayersLabel.Location = new Point(m_BoardSizeLabel.Left + 10, m_10X10Size.Top + m_10X10Size.Height + 30);
-
-
 
             m_FirstPlayerLabel.Text = "Player 1:";
             m_FirstPlayerLabel.Location = new Point(m_PlayersLabel.Left + 20, m_PlayersLabel.Top + m_PlayersLabel.Height + 20);
@@ -76,7 +74,7 @@ namespace Ex04.Damka.FormUI
             m_SecPlayerNameText.Enabled = false;
             m_SecPlayerNameText.Text = "[Computer]";
 
-            m_SecPlayerCheckBox.Location = new Point(m_PlayersLabel.Left, m_SecPlayerLabel.Top + (m_SecPlayerLabel.Height /2) - (m_SecPlayerCheckBox.Height /2) );
+            m_SecPlayerCheckBox.Location = new Point(m_PlayersLabel.Left, m_SecPlayerLabel.Top + (m_SecPlayerLabel.Height / 2) - (m_SecPlayerCheckBox.Height / 2) );
 
             m_DoneButton.Text = "Done";
             m_DoneButton.Location = new Point(200, 220);
@@ -108,7 +106,6 @@ namespace Ex04.Damka.FormUI
 
             m_GameLogic = new GameLogic(players, m_BoardSize, m_IsSecondPlayerComputer ? eGameType.HumanVsComputer : eGameType.HumanVsHuman);
             m_FormBoard = new FormDamkaBoard(m_BoardSize, m_GameLogic);
-
         }
 
         private bool checkSettingsAreValid()
@@ -124,7 +121,6 @@ namespace Ex04.Damka.FormUI
                 const string message = "Player 1 Name can't be empty";
                 MessageBox.Show(message);
             }
-
             else if (m_SecPlayerCheckBox.Checked && string.IsNullOrEmpty(m_SecPlayerNameText.Text))
             {
                 const string message = "Player 2 Name can't be empty";
@@ -149,6 +145,7 @@ namespace Ex04.Damka.FormUI
                 {
                     m_IsSecondPlayerComputer = false;
                 }
+
                 settingsValid = true;
             }
 
@@ -180,6 +177,5 @@ namespace Ex04.Damka.FormUI
         }
 
         public byte BoardSize { get => m_BoardSize; }
-
     }
 }

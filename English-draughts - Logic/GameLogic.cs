@@ -9,8 +9,8 @@ namespace Ex04.Damka.Logic
     {
         private readonly Board m_GameBoard;
         private readonly Player[] m_Players;
-        private byte m_BoardSize;
         private readonly eGameType m_GameType;
+        private byte m_BoardSize;       
         private eGameResult m_GameResult;      
 
         public event CellChosenEventHandler CellChosen;
