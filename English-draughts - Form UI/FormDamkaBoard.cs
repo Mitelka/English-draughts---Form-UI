@@ -325,14 +325,18 @@ namespace Ex04.Damka.FormUI
 
         private void initControls()
         {
-            m_FirstPlayerLabel.Text = r_GameLogic.Players[0].PlayerName + ":";
+            System.Text.StringBuilder nameStringBuilder = new System.Text.StringBuilder();
+            nameStringBuilder.Append(r_GameLogic.Players[0].PlayerName).Append(":");
+            m_FirstPlayerLabel.Text = nameStringBuilder.ToString();
             m_FirstPlayerLabel.Location = new Point(m_DamkaBoard[0, 0].Left + 12, 20);
             m_FirstPlayerLabel.AutoSize = true;
             m_FirstPlayerScoreLabel.Text = "0";
             m_FirstPlayerScoreLabel.Location = new Point(m_FirstPlayerLabel.Left + m_FirstPlayerLabel.Width - k_BoardLocationX, m_FirstPlayerLabel.Top);
             m_FirstPlayerScoreLabel.AutoSize = true;
 
-            m_SecPlayerLabel.Text = r_GameLogic.Players[1].PlayerName + ":";
+            nameStringBuilder.Clear();
+            nameStringBuilder.Append(r_GameLogic.Players[1].PlayerName).Append(":");
+            m_SecPlayerLabel.Text = nameStringBuilder.ToString();
             m_SecPlayerLabel.Location = new Point(m_FirstPlayerScoreLabel.Left + m_FirstPlayerScoreLabel.Width, m_FirstPlayerLabel.Top);
             m_SecPlayerLabel.AutoSize = true;
             m_SecPlayerScoreLabel.Text = "0";
