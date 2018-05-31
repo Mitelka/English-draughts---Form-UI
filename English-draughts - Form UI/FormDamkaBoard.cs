@@ -158,6 +158,7 @@ namespace Ex04.Damka.FormUI
 
         private void cellButton_CheckingGameOver(object i_Sender, CellsChosenEventArgs i_E)
         {
+            
             m_IsGameFinished = r_GameLogic.CheckIfGameOver(i_E.m_DestCell, m_CurrPlayerIndexTurn);
             if (m_IsGameFinished)
             {
@@ -209,7 +210,7 @@ namespace Ex04.Damka.FormUI
         private void showWinnerResult(int i_WinnerIndex)
         {
             System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append("Player ").Append(i_WinnerIndex + 1).Append(" Won!");
+            stringBuilder.Append(r_GameLogic.Players[i_WinnerIndex].PlayerName).Append(" Won!");
             showResults(stringBuilder.ToString());
         }
 
