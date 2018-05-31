@@ -100,7 +100,7 @@ namespace Ex04.Damka.FormUI
 
         private void initializeGameLogicAndGameForm()
         {
-            Player playerOne = new Player(ePlayerType.Human, eSign.O, m_FirstPlayerLabel.Text);
+            Player playerOne = new Player(ePlayerType.Human, eSign.O, m_FirstPlayerNameText.Text);
             Player playerTwo = new Player(m_IsSecondPlayerComputer ? ePlayerType.Computer : ePlayerType.Human, eSign.X, m_SecPlayerNameText.Text);
             Player[] players = new Player[2];
             players[0] = playerOne;
