@@ -345,7 +345,6 @@ namespace Ex04.Damka.FormUI
             nameStringBuilder.Append(r_GameLogic.Players[1].PlayerName).Append(":");
             m_SecPlayerLabel.Text = nameStringBuilder.ToString(); 
             m_SecPlayerLabel.Location = new Point(m_DamkaBoard[0, r_GameLogic.GameBoard.BoardSize - 2].Left, m_FirstPlayerLabel.Top);
-           // m_SecPlayerLabel.Location = new Point(m_FirstPlayerScoreLabel.Left + m_FirstPlayerScoreLabel.Width + 12, m_FirstPlayerLabel.Top);
             m_SecPlayerLabel.AutoSize = true;
             m_SecPlayerScoreLabel.Text = "0";
             m_SecPlayerScoreLabel.Location = new Point(m_SecPlayerLabel.Left + m_SecPlayerLabel.Width, m_FirstPlayerLabel.Top);
