@@ -165,7 +165,7 @@ namespace Ex04.Damka.FormUI
                 {
                     r_GameLogic.UpdatePlayersScore(m_CurrPlayerIndexTurn);
                     updateWinnerScore(m_CurrPlayerIndexTurn);
-                    showWinnerResult(r_GameLogic.GetWinnerOfAllGamesIndex());
+                    showWinnerResult(m_CurrPlayerIndexTurn);
                 }
                 else if (r_GameLogic.GameResult == eGameResult.TIE)
                 {
@@ -302,7 +302,7 @@ namespace Ex04.Damka.FormUI
                 button.BackColor = Color.LightBlue;
                 button.Click -= selectBoardButton_Click;
                 button.Click += new EventHandler(deselectBoardButton_Click);
-                if (m_OriginCell != null)
+                if (m_OriginCell != null && m_OriginCell != button)
                 {
                     m_OriginCell.BackColor = Color.White;
                 }
@@ -318,9 +318,16 @@ namespace Ex04.Damka.FormUI
         private void deselectBoardButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            button.BackColor = Color.White;
-            button.Click -= deselectBoardButton_Click;
-            button.Click += new EventHandler(selectBoardButton_Click);
+            if (button.Text != " ")
+            {
+                button.BackColor = Color.White;
+                button.Click -= deselectBoardButton_Click;
+                button.Click += new EventHandler(selectBoardButton_Click);
+            }
+            else
+            {
+                cellButtonClicked(button);
+            }
         }
 
         private void initControls()
@@ -331,13 +338,14 @@ namespace Ex04.Damka.FormUI
             m_FirstPlayerLabel.Location = new Point(m_DamkaBoard[0, 0].Left + 12, 20);
             m_FirstPlayerLabel.AutoSize = true;
             m_FirstPlayerScoreLabel.Text = "0";
-            m_FirstPlayerScoreLabel.Location = new Point(m_FirstPlayerLabel.Left + m_FirstPlayerLabel.Width - k_BoardLocationX, m_FirstPlayerLabel.Top);
+            m_FirstPlayerScoreLabel.Location = new Point(m_FirstPlayerLabel.Left + m_FirstPlayerLabel.Width, m_FirstPlayerLabel.Top);
             m_FirstPlayerScoreLabel.AutoSize = true;
 
             nameStringBuilder.Clear();
             nameStringBuilder.Append(r_GameLogic.Players[1].PlayerName).Append(":");
-            m_SecPlayerLabel.Text = nameStringBuilder.ToString();
-            m_SecPlayerLabel.Location = new Point(m_FirstPlayerScoreLabel.Left + m_FirstPlayerScoreLabel.Width, m_FirstPlayerLabel.Top);
+            m_SecPlayerLabel.Text = nameStringBuilder.ToString(); 
+            m_SecPlayerLabel.Location = new Point(m_DamkaBoard[0, r_GameLogic.GameBoard.BoardSize - 2].Left, m_FirstPlayerLabel.Top);
+           // m_SecPlayerLabel.Location = new Point(m_FirstPlayerScoreLabel.Left + m_FirstPlayerScoreLabel.Width + 12, m_FirstPlayerLabel.Top);
             m_SecPlayerLabel.AutoSize = true;
             m_SecPlayerScoreLabel.Text = "0";
             m_SecPlayerScoreLabel.Location = new Point(m_SecPlayerLabel.Left + m_SecPlayerLabel.Width, m_FirstPlayerLabel.Top);
