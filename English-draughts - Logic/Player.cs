@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ex04.Damka.Logic
+namespace Ex05.Damka.Logic
 {
     public class Player
     {

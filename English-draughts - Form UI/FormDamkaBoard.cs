@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Ex04.Damka.Logic;
+using Ex05.Damka.Logic;
 
-namespace Ex04.Damka.FormUI
+namespace Ex05.Damka.FormUI
 {
     public class FormDamkaBoard : Form
     {

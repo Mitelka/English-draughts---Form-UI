@@ -1,4 +1,4 @@
-﻿namespace Ex04.Damka.Logic
+﻿namespace Ex05.Damka.Logic
 {
     public enum ePlayerType
     {

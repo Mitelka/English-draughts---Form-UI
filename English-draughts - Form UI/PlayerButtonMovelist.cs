@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Ex04.Damka.FormUI
+namespace Ex05.Damka.FormUI
 {
     internal class PlayerButtonMovelist
     {

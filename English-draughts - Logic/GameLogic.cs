@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ex04.Damka.Logic
+namespace Ex05.Damka.Logic
 { 
     public delegate void CellChosenEventHandler(object sender, CellsChosenEventArgs e);
 

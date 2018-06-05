@@ -61,21 +61,25 @@
     <Compile Include="FormDamkaBoard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGaemSettings.cs">
+    <Compile Include="FormGameSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Progrem.cs" />
+    <Compile Include="PlayerButtonMovelist.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\English-draughts - Logic\Ex04.Damka.Logic.csproj">
+    <ProjectReference Include="..\English-draughts - Logic\Ex05.Damka.Logic.csproj">
       <Project>{4a02fb8d-3110-4ca7-8cf1-b2a7436bc36a}</Project>
-      <Name>Ex04.Damka.Logic</Name>
+      <Name>Ex05.Damka.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Exercise Checking Report.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
